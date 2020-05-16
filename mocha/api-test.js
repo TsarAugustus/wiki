@@ -16,9 +16,9 @@ function randomString(length, chars) {
 //Test /api endpoint
 
 describe('API Test', function() {
-  it('GET /api', function(done) {
-     chai.request('http://localhost:3000/api')
-      .get('/')
+  it('GET page from /api/wiki', function(done) {
+     chai.request('http://localhost:3000/api/wiki')
+      .get('/Duplicate')
       .then(function (res) {
         console.log('1');
         expect(res.status).to.equal(200)
@@ -45,25 +45,13 @@ describe('API Test', function() {
     done();
   });
 
-  it('PUT /api', function(done) {
-     chai.request('http://localhost:3000/api')
-      .put('/')
+  it('PUT /api/wiki', function(done) {
+     chai.request('http://localhost:3000/api/wiki')
+      .put('/Duplicate')
+      .send({"description": randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')})
       .then(function (res) {
         console.log('4');
-        expect(res.status).to.equal(200)
-      })
-      .catch(function (err) {
-        throw err;
-      });
-    done();
-  })
-
-  it('DELETE /API', function(done) {
-     chai.request('http://localhost:3000/api')
-      .delete('/')
-      .then(function (res) {
-        console.log('5');
-        expect(res.status).to.equal(202)
+        expect(res.status).to.equal(204)
       })
       .catch(function (err) {
         throw err;

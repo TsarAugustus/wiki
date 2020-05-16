@@ -3,8 +3,12 @@ const router = express.Router();
 const Page = require('../models/Page');
 
 //Get a page
-router.get('/', function(req, res) {
-  return res.sendStatus(200);
+router.get('/wiki/:id', function(req, res) {
+  return Page
+    .findOne({title: req.params.id})
+    .then((page) => {
+      return res.status(200).send(page);
+    })
 });
 
 //Create a page
@@ -35,12 +39,28 @@ router.post('/wiki', (req, res) => {
 });
 
 //Change a page
-router.put('/', function(req, res) {
-  return res.sendStatus(200);
+router.put('/wiki/:id', function(req, res) {
+  return Page
+    .findOne({title: req.params.id})
+    .then((page) => {
+      page.description = req.body.description;
+      page.save((err) => {
+        if(err) throw err;
+        console.log('Page updated');
+        return res.status(204).send(page);
+      })
+    })
+    .catch((err) => {
+      return console.log(err);
+    });
 });
 
 //Delete a page
-router.delete('/', function(req, res) {
-  return res.sendStatus(202);
+router.delete('/wiki/:id', function(req, res) {
+  Page.deleteOne({title: req.params.id}, (err) => {
+    if(err) console.log(err);
+    return res.status(202);
+    console.log('Deleted: ' + req.params.id)
+  });
 });
 module.exports = router;
