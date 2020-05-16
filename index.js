@@ -13,14 +13,19 @@ app.set('view engine', '.pug');
 mongoose.connect('mongodb://localhost:27017/wiki', {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true});
 const connection = mongoose.connection;
 connection.once('open', () => {
-  console.log('MongoDB Connection');
+  //console.log('MongoDB Connection');
 });
 
 const index = require('./routes/index');
 const api = require('./routes/api');
 
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 app.use('/', index);
 app.use('/api', api);
+app.use(function(req, res) {
+  res.status(404).send('Page doesn\'t exist');
+});
 
 app.listen(port,() => {
   console.log('The server is running on port :', port)
